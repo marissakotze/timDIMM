@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 import os
 import time
+import datetime
 import numpy as np
 from pygto900 import GTO900
 
@@ -12,6 +13,12 @@ def guide_gto900(tol=100):
 
    """Laure (11-04-2015): Inverted 'Move East' and 'Move West' commands as
    it was pushing the spots off the FOV instead of re-centering them."""
+
+   """Marissa (16-12-2016): Corrected 'Move East' and 'Move West' commands and fixed the test for if side=="w" to if side=="west"
+   That was actually why it moved stars off CCD for 50% of the scenarios. It always executed the 'else'"""
+
+   # Create a log file of moves and drifts
+   driftlog = open('drift.log', 'a')
  
    #set up the telescope
    g = GTO900()
@@ -27,28 +34,50 @@ def guide_gto900(tol=100):
    maxy=max(0.0, data[0,1], data[1,1])
    print side
    print minx, maxx, miny, maxy
+   print >> driftlog, side
+   print >> driftlog, datetime.datetime.now(), minx, maxx, miny, maxy   
 
    g.set_center_rate(2)
    if maxx > 320-tol:
+      print "I am too far right on the CCD"
       print "Move South."
+      print >> driftlog, "Move South."
       g.move('s')
    if minx < tol:
+      print "I am too far left on the CCD"
       print "Move North."
+      print >> driftlog, "Move North."
       g.move('n')
    if miny < tol:
-       if side == 'w':
-           print "Move East."
-           g.move('e')
-       else:
+       if side == 'west':
+#           print "Move East."
+#           g.move('e')
+           print "I am west of the pier and too low on the CCD"
            print "Move West."
+           print >> driftlog, "Move West."
            g.move('w')
+       else:
+#           print "Move West."
+#           g.move('w')
+           print "I am east of the pier and too low on the CCD"
+           print "Move East."
+           print >> driftlog, "Move East."
+           g.move('e')
    if maxy > 240-tol:
-       if side == 'w':
-           print "Move West."
-           g.move('w')
-       else:
+       if side == 'west':
+#           print "Move West."
+#           g.move('w')
+           print "I am west of the pier and too high on the CCD"
            print "Move East."
+           print >> driftlog, "Move East."
            g.move('e')
+       else:
+#           print "Move East."
+#           g.move('e')
+           print "I am east of the pier and too high on the CCD"
+           print "Move West."
+           print >> driftlog, "Move West."
+           g.move('w')
 
    time.sleep(1)
    g.haltall()
