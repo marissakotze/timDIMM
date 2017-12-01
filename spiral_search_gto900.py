@@ -58,6 +58,11 @@ def spiralsearch(g, niter=14):
         n = n + 1
 
         for i in range(n):
+            try: 
+                print 'HRnr Name    RA2000   Dec2000     Vmag B-V   SED SpType'
+                os.system("cat current_object_details")
+            except:
+                print "File current_object_details does not exist"
             it = it + 1
             y = y + 1
             plus_y(g)
@@ -71,6 +76,11 @@ def spiralsearch(g, niter=14):
             break
 
         for i in range(n):
+            try: 
+                print 'HRnr Name    RA2000   Dec2000     Vmag B-V   SED SpType'
+                os.system("cat current_object_details")
+            except:
+                print "File current_object_details does not exist"
             it = it + 1
             x = x - 1
             minus_x(g)
@@ -86,6 +96,11 @@ def spiralsearch(g, niter=14):
         n = n + 1
 
         for i in range(n):
+            try: 
+                print 'HRnr Name    RA2000   Dec2000     Vmag B-V   SED SpType'
+                os.system("cat current_object_details")
+            except:
+                print "File current_object_details does not exist"
             it = it + 1
             y = y - 1
             minus_y(g)
@@ -99,6 +114,11 @@ def spiralsearch(g, niter=14):
             break
 
         for i in range(n):
+            try: 
+                print 'HRnr Name    RA2000   Dec2000     Vmag B-V   SED SpType'
+                os.system("cat current_object_details")
+            except:
+                print "File current_object_details does not exist"
             it = it + 1
             x = x + 1
             plus_x(g)
